@@ -27,7 +27,7 @@
       });
 
       $("#generateNcontacts").bind("click", function () {
-        var value = document.getElementById('numberOfContacts').value;
+        var value = document.getElementById('numberOfContactsSlider').value;
         getNContacts(value);
       });
 
@@ -74,5 +74,22 @@
           }
         });
       }
+
+      $(function () {
+        var val = $('#numberOfContactsSlider').val();
+        output = $('#numberOfContactsOutput');
+
+        output.html(val);
+
+        $('#numberOfContactsSlider').change(function () {
+          output.html(this.value);
+        });
+
+        $("#numberOfContactsSlider").mousemove(function () {
+          $("#numberOfContactsOutput").text($("#numberOfContactsSlider").val())
+        })
+
+      });
+
     });
 

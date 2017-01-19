@@ -17,55 +17,21 @@
 
     <script src="~/scripts/test.js"></script>
     <script src="~/scripts/ajaxcall.js"></script>
-    <style>
-        body {
-            background-color: #3f3e3b;
-            color: #fff;
-        }
-
-        #chartdiv {
-            width: 100%;
-            height: 500px;
-        }
-    </style>
+    <script src="~/scripts/jquery.numble.min.js"></script>
+    <link rel="stylesheet" href="~/scripts/styles.css">
+ 
 </head>
 <body>
-    @*<div>
-        Name: @Model.Name
+
+    <div class="generateLine">
+        Add any amount of new contacts:
+        @*@Html.TextBox("generateNcontacts", "10", new { id = "numberOfContacts" })*@
+        @*<input type="number" id="numberOfContacts" type="range"/>*@
+        <input type="range" id="numberOfContactsSlider" value="10" name="range" min="1" max="1000"> <span id="numberOfContactsOutput"></span>
+        <a id="generateNcontacts" class="button">Generate</a>
+        </div>
         <br />
-        Text: @Model.Text
-    </div>*@
-
-    Click on:
-    @*@Html.Label("Books", new { id = "labelId" })    
-
-    <div id="BookDetail" style="white-space: pre;">
-
-    </div>*@
-    <br/>
-    @Html.Label("Generate one contact", new { id = "generateoneid" })
-    <br />
-    <br />
-    @Html.Label("Generate 10 contacts", new { id = "generatetenid" })
-    <br />
-    <br />
-    <br />
-    Add any amount of new contacts:
-    @Html.TextBox("generateNcontacts","10", new { id = "numberOfContacts" })
-    <a id="generateNcontacts">Generate</a>
-
-    @using (Html.BeginRouteForm(Sitecore.Mvc.Configuration.MvcSettings.SitecoreRouteName, FormMethod.Post))
-    {
-        @Html.Sitecore().FormHandler("ContactGenerator", "RandomGenerate")
-    @*@Html.LabelFor(x => x.Name)
-    @Html.EditorFor(x => x.Name)
-
-    @Html.LabelFor(x => x.Text)
-    @Html.EditorFor(x => x.Text)*@
-
-    <input type="submit" value="Generate 1000 contacts" />
-    }
-
-    <div id="chartdiv"></div>	
+        <br />
+        <div id="chartdiv"></div>
 </body>
 </html>
