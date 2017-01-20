@@ -56,6 +56,10 @@
       <HintPath>..\RandomCityGenerator\RandomCityGenerator\bin\Debug\RandomCityGenerator.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RandomNameGenerator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\RandomNameGenerator.1.0.4\lib\RandomNameGenerator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Sitecore.Analytics">
       <HintPath>..\Website\bin\Sitecore.Analytics.dll</HintPath>
       <Private>False</Private>
@@ -191,7 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="App_Config\Include\zzzContactGenerator\ContactGenerator.config" />
+    <Content Include="App_Config\Include\zzzContactGenerator\ContactGenerator.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\Todd2.pubxml" />
     <Content Include="Views\PageHeader.cshtml" />
     <Content Include="Views\HW\Index.cshtml" />

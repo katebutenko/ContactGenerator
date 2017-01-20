@@ -27,6 +27,7 @@ using Sitecore.Data;
 using Sitecore.Data.Items;
 using System.Globalization;
 using Sitecore.SecurityModel;
+using RandomNameGenerator;
 
 namespace Website.Controllers
 {
@@ -148,9 +149,33 @@ namespace Website.Controllers
 
     private void SetPersonalInfo(Contact contact)
     {
+      Random rand = new Random();
+      
       var personalInfo = contact.GetFacet<IContactPersonalInfo>("Personal");
-      personalInfo.FirstName = Faker.Name.First();
-      personalInfo.Surname = Faker.Name.Last();            
+
+      double genderType = rand.NextDouble();
+
+      if (genderType < 0.475)
+      {
+        personalInfo.Gender = "Female";
+        personalInfo.FirstName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(NameGenerator.GenerateFirstName(Gender.Female).ToLower());
+        personalInfo.Surname = Faker.Name.Last();
+      }
+
+      if (genderType >= 0.475 && genderType < 0.95)
+      {
+        personalInfo.Gender = "Male";
+        personalInfo.FirstName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(NameGenerator.GenerateFirstName(Gender.Male).ToLower());
+        personalInfo.Surname = Faker.Name.Last();
+      }
+
+      if (genderType >= 0.95) //approximately :)
+      {
+        personalInfo.Gender = "Other";
+        personalInfo.FirstName = Faker.Name.First();
+        personalInfo.Surname = Faker.Name.Last();
+      }
+    
     }
         
     [HttpPost]
