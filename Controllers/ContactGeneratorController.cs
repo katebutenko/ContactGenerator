@@ -26,6 +26,7 @@ using Website.Common;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using System.Globalization;
+using Sitecore.SecurityModel;
 
 namespace Website.Controllers
 {
@@ -85,6 +86,21 @@ namespace Website.Controllers
       return contact;
     }
 
+    private Contact CreateContactAndSetTag(Guid tagValue)
+    {
+      var contactIdentifier = Guid.NewGuid();
+      var contact = contactRepository.CreateContact(contactIdentifier);
+
+      SetPersonalInfo(contact);
+      SetAddress(contact);
+      SetEmail(contact);
+      SetTag(contact, tagValue);
+
+      var leaseOwner = new LeaseOwner("ContactGenerator", LeaseOwnerType.OutOfRequestWorker);
+      contactRepository.SaveContact(contact, new ContactSaveOptions(true, leaseOwner));
+      return contact;
+    }
+
     private void AddInteraction(Contact contact, Airport airport)
     {
       TouchPointRecord touchPointRecord = new TouchPointRecord(Guid.Parse(Common.Constants.TouchPointItemId), DateTime.UtcNow, TimeSpan.FromSeconds(1.0));
@@ -115,6 +131,11 @@ namespace Website.Controllers
       primaryAddress.Location.Longitude = city.Longitude;
 
       addresses.Preferred = "Primary";      
+    }
+
+    private void SetTag(Contact contact,Guid tagValue)
+    {
+      contact.Tags.Add("Airport", tagValue.ToString());
     }
 
     private void SetEmail(Contact contact)
@@ -157,9 +178,9 @@ namespace Website.Controllers
 
       for (int i = 1; i <= n; i++)
       {
-        Contact contact = CreateContact();
-
         int randomAirportIndex = randomizer.Next(airportCollection.Count());
+        Contact contact = CreateContactAndSetTag(airportCollection[randomAirportIndex].Id);
+        
         AddInteraction(contact, airportCollection[randomAirportIndex]);
 
         list.Add(new SimplifiedContact(contact));
@@ -170,17 +191,23 @@ namespace Website.Controllers
 
     private List<Airport> GetPopularAirports()
     {
-      Database db = Factory.GetDatabase(Common.Constants.DefinitionDatabase);
       List<Airport> resultList = new List<Airport>();
-      foreach (Item item in db.GetItem(Common.Constants.AirportsItemId).Children)
+
+      using (new SecurityDisabler())
       {
-        resultList.Add(new Airport () {
-          Id = item.ID.ToGuid(),
-          City = item.Fields["City"].Value,
-          Country = item.Fields["Country"].Value,
-          Latitude = float.Parse(item.Fields["Latitude"].Value, CultureInfo.InvariantCulture.NumberFormat),
-          Longitude = float.Parse(item.Fields["Longitude"].Value, CultureInfo.InvariantCulture.NumberFormat)
-        });
+        Database db = Factory.GetDatabase(Common.Constants.DefinitionDatabase);
+
+        foreach (Item item in db.GetItem(Common.Constants.AirportsItemId).Children)
+        {
+          resultList.Add(new Airport()
+          {
+            Id = item.ID.ToGuid(),
+            City = item["City"],
+            Country = item["Country"],
+            Latitude = float.Parse(item["Latitude"], CultureInfo.InvariantCulture.NumberFormat),
+            Longitude = float.Parse(item["Longitude"], CultureInfo.InvariantCulture.NumberFormat)
+          });
+        }
       }
       return resultList;
     }

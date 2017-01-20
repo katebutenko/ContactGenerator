@@ -18,23 +18,23 @@ var map = AmCharts.makeChart("chartdiv", {
 
   "dataProvider": {
     "map": "worldLow",
-    "zoomLevel": 3.5,
-    "zoomLongitude": -55,
-    "zoomLatitude": 42,
-
-    "lines": [{
-      "id": "line1",
-      "arc": -0.85,
-      "alpha": 0.3,
-      "latitudes": [48.8567, 43.8163, 34.3, 23],
-      "longitudes": [2.3510, -79.4287, -118.15, -82]
-    }, {
-      "id": "line2",
-      "alpha": 0,
-      "color": "#000000",
-      "latitudes": [48.8567, 43.8163, 34.3, 23],
-      "longitudes": [2.3510, -79.4287, -118.15, -82]
-    }],
+    "zoomLevel": 2,
+    "zoomLongitude": 5,
+    "zoomLatitude": 35,
+   
+    //"lines": [{
+    //  "id": "line1",
+    //  "arc": -0.85,
+    //  "alpha": 0.3,
+    //  "latitudes": [48.8567, 43.8163, 34.3, 23],
+    //  "longitudes": [2.3510, -79.4287, -118.15, -82]
+    //}, {
+    //  "id": "line2",
+    //  "alpha": 0,
+    //  "color": "#000000",
+    //  "latitudes": [48.8567, 43.8163, 34.3, 23],
+    //  "longitudes": [2.3510, -79.4287, -118.15, -82]
+    //}],
     "images": [{
       "svgPath": targetSVG,
       "title": "Paris",
@@ -55,28 +55,30 @@ var map = AmCharts.makeChart("chartdiv", {
       "title": "Havana",
       "latitude": 23,
       "longitude": -82
-    }, {
-      "svgPath": planeSVG,
-      "positionOnLine": 0,
-      "color": "#000000",
-      "alpha": 0.1,
-      "animateAlongLine": true,
-      "lineId": "line2",
-      "flipDirection": true,
-      "loop": true,
-      "scale": 0.03,
-      "positionScale": 1.3
-    }, {
-      "svgPath": planeSVG,
-      "positionOnLine": 0,
-      "color": "#585869",
-      "animateAlongLine": true,
-      "lineId": "line1",
-      "flipDirection": true,
-      "loop": true,
-      "scale": 0.03,
-      "positionScale": 1.8
-    }]
+    }
+    //, {
+    //  "svgPath": planeSVG,
+    //  "positionOnLine": 0,
+    //  "color": "#000000",
+    //  "alpha": 0.1,
+    //  "animateAlongLine": true,
+    //  "lineId": "line2",
+    //  "flipDirection": true,
+    //  "loop": true,
+    //  "scale": 0.03,
+    //  "positionScale": 1.3
+    //}, {
+    //  "svgPath": planeSVG,
+    //  "positionOnLine": 0,
+    //  "color": "#585869",
+    //  "animateAlongLine": true,
+    //  "lineId": "line1",
+    //  "flipDirection": true,
+    //  "loop": true,
+    //  "scale": 0.03,
+    //  "positionScale": 1.8
+    //}
+    ]
   },
 
   "areasSettings": {
@@ -92,15 +94,23 @@ var map = AmCharts.makeChart("chartdiv", {
     "adjustAnimationSpeed": true
   },
 
-  "linesSettings": {
-    "color": "#585869",
-    "alpha": 0.4
-  },
+  //"linesSettings": {
+  //  "color": "#585869",
+  //  "alpha": 0.4
+  //},
 
-  "export": {
-    "enabled": true
-  }
+  //"export": {
+  //  "enabled": true
+  //}
 
+});
+
+map.addListener("click", function (event) {
+  stopRealTimeMapUpdate();
+});
+
+map.addListener("dragCompleted", function (event) {
+  stopRealTimeMapUpdate();
 });
 
 function addContact(point) {
@@ -110,5 +120,57 @@ function addContact(point) {
   point.scale = 0.7;
 
   map.dataProvider.images.push(point);
+  //map.validateData();
+}
+
+var timer = null;
+
+function tick() {
+  draw5Images();
+
+  restartRealTimeMapUpdate(); 
+};
+
+function restartRealTimeMapUpdate() {
+  timer = setTimeout(tick, 100);
+};
+
+function stopRealTimeMapUpdate() {
+  clearTimeout(timer);
+};
+
+var imagesToDraw = [];
+
+function draw5Images() {
+
+  if (imagesToDraw.length > 0) {
+    var take = imagesToDraw.splice(0, 5);
+
+
+    $.each(take, function (index, point) {
+
+      point.svgPath = targetSVG;
+      point.zoomLevel = 5;
+      point.scale = 0.7;
+      map.dataProvider.images.push(point);
+    })
+    //map.dataProvider.images.push(point);
+    //map.dataProvider.dataChanged = true;
+    redrawWithPreservedPosition();
+  }
+
+}
+
+function redrawWithPreservedPosition(){
+  //preserve map position
+  map.dataProvider.zoomLevel = map.zoomLevel();
+
+  if (map.dataProvider.zoomLatitudeC == undefined) {
+    map.dataProvider.zoomLatitudeC = map.dataProvider.zoomLatitude = map.zoomLatitude();// - weird bug with map moving
+  }
+  else {
+    map.dataProvider.zoomLatitudeC = map.dataProvider.zoomLatitude;
+  }
+  map.dataProvider.zoomLongitude = map.dataProvider.zoomLongitudeC = map.zoomLongitude();
   map.validateData();
 }

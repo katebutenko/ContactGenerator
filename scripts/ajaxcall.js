@@ -59,22 +59,32 @@
           data: { n: number },
           context: this,
           success: function (data) {
-            console.log("success", data);
+            console.log("success");
 
-            $.each(data, function (index, contact) {
-              var point = new Object();
-              point.latitude = contact.Latitude;
-              point.longitude = contact.Longitude;
-              point.title = contact.Name;
-              addContact(point);
-            });
+            drawPointsOnMap(data);
+            restartRealTimeMapUpdate();
           },
           error: function (data) {
             console.log("error", data);
           }
         });
       }
+      function drawPointsOnMap(data)
+      {
+        
+        $.each(data, function (index, contact) {
 
+          var point = new Object();
+          point.latitude = contact.Latitude;
+          point.longitude = contact.Longitude;
+          point.title = contact.Name;
+          imagesToDraw.push(point);
+          //addContact(point);
+
+        })
+       }
+                      
+        
       $(function () {
         var val = $('#numberOfContactsSlider').val();
         output = $('#numberOfContactsOutput');
@@ -92,4 +102,8 @@
       });
 
     });
+
+function readFile(index) {
+  
+}
 
