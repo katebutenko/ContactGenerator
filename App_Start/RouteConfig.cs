@@ -12,11 +12,11 @@ namespace Website.App_Start
   {
 
     public virtual void Process(PipelineArgs args)
-    {
-      //RouteTable.Routes.MapRoute("CustomRoute", "some/route/{controller}/{action}/{id}");
+    {      
       RouteTable.Routes.MapRoute("ContactRoute", "GetContact", new { controller = "ContactGenerator", action = "GetContactDetails" });
       RouteTable.Routes.MapRoute("SimplifiedContactRoute", "GetSimplifiedContact", new { controller = "ContactGenerator", action = "GetSimplifiedContact" });
       RouteTable.Routes.MapRoute("GetNContactsRoute", "GetNContacts", new { controller = "ContactGenerator", action = "GetNContacts" });
+      RouteTable.Routes.MapRoute("RunSegmentedRuleRoute", "RunSegmentRuleOnAllContacts", new { controller = "ContactGenerator", action = "RunSegmentRuleOnAllContacts" });
     }
 
     public static void RegisterRoutes(RouteCollection routes)

@@ -28,6 +28,7 @@ using Sitecore.Data.Items;
 using System.Globalization;
 using Sitecore.SecurityModel;
 using RandomNameGenerator;
+using Sitecore.Shell.Applications.Analytics.SegmentBuilder;
 
 namespace Website.Controllers
 {
@@ -110,7 +111,7 @@ namespace Website.Controllers
 
       EventRecord item = new EventRecord(Common.Constants.EventName, DateTime.UtcNow)
       {
-        Data = airport.Id.ToString()
+        Data = "{" + airport.Id.ToString() + "}"
       };
       touchPointRecord.Events.Add(item);
 
@@ -138,7 +139,7 @@ namespace Website.Controllers
 
     private void SetTag(Contact contact,Guid tagValue)
     {
-      contact.Tags.Add("Airport", tagValue.ToString());
+      contact.Tags.Add("Airport", Sitecore.Data.ID.Parse(tagValue).ToString());
     }
 
     private void SetEmail(Contact contact)
@@ -239,6 +240,28 @@ namespace Website.Controllers
       }
       return resultList;
     }
-  }
+
+    [HttpPost]
+    public JsonResult RunSegmentRuleOnAllContacts()
+    {
+      //country should be passed as parameter
+      string country = "Hawaii";
+
+      Database db = Factory.GetDatabase(Common.Constants.DefinitionDatabase);
+      var rule = db.GetItem(Common.Constants.DestinationAirportRuleItemId)["Query"];
+      SegmentBuilder builder = new SegmentBuilder();
+      List<Guid> listOfContacts = builder.RunContactIDsQueryAction<List<Guid>>(rule, db, q => q.ToList<Guid>());
+      
+      List<SimplifiedContact> resultList = new List<SimplifiedContact>();
+      foreach (var contactId in listOfContacts)
+      {
+        Contact contact = contactRepository.LoadContactReadOnly(contactId);
+        SimplifiedContact simplifiedContact = new SimplifiedContact(contact);
+        simplifiedContact.DestinationCountry = country;
+        resultList.Add(simplifiedContact);
+      }
+      return Json(resultList);
+    }
+}
 
 }

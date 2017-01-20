@@ -15,21 +15,20 @@
 
     <script src="~/scripts/test.js"></script>
     <script src="~/scripts/ajaxcall.js"></script>
-    
+
     <link rel="stylesheet" href="~/scripts/styles.css">
- 
+
 </head>
 <body>
 
     <div class="generateLine">
         Add any amount of new contacts:
-        @*@Html.TextBox("generateNcontacts", "10", new { id = "numberOfContacts" })*@
-        @*<input type="number" id="numberOfContacts" type="range"/>*@
         <input type="range" id="numberOfContactsSlider" value="10" name="range" min="1" max="1000"> <span id="numberOfContactsOutput"></span>
         <a id="generateNcontacts" class="button">Generate</a>
-        </div>
-        <br />
-        <br />
-        <div id="chartdiv"></div>
+        <a id="showHawaiiVisitors" class="button">Show all contacts that have been to Hawaii</a>
+    </div>
+    <br />
+    <br />
+    <div id="chartdiv"></div>
 </body>
 </html>

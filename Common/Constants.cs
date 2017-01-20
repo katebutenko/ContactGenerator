@@ -13,6 +13,7 @@ namespace Website.Common
     public const string EventName = "Flight Purchase";
     public const string EventSiteName = "offline";
     public const string DefinitionDatabase = "master";
-   
+    public const string DestinationAirportRuleItemId = "{732B1919-14E3-4875-B846-3499148A2AC0}";
+
   }
 }

@@ -1,21 +1,5 @@
 ﻿$(function () {
-      $("#labelId").bind("click", function () {
-       
-          $.ajax({
-            url: "/GetContact",
-            type: "POST",            
-            context: this,
-            success: function (data) {
-              var BookString = "Book Title: " + data.ContactId;
-              $("#BookDetail").text(BookString);
-              console.log("success", data);
-            },
-            error: function (data) {
-              console.log("error", data);
-            }
-          });
-        
-      });
+     
       $("#generateoneid").bind("click", function () {
         getOneContact();
       });
@@ -27,10 +11,31 @@
       });
 
       $("#generateNcontacts").bind("click", function () {
+        cleanMap();
         var value = document.getElementById('numberOfContactsSlider').value;
         getNContacts(value);
       });
 
+      $("#showHawaiiVisitors").bind("click", function () {
+
+        cleanMap();
+
+        $.ajax({
+          url: "/RunSegmentRuleOnAllContacts",
+          type: "POST",
+          //data: { n: number },
+          context: this,
+          success: function (data) {
+            console.log("success");
+
+            drawPointsOnMap(data);
+            restartRealTimeMapUpdate();
+          },
+          error: function (data) {
+            console.log("error", data);
+          }
+        });
+      });
       
       function getOneContact(){
         $.ajax({
@@ -69,6 +74,7 @@
           }
         });
       }
+
       function drawPointsOnMap(data)
       {
         
