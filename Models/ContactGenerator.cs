@@ -7,7 +7,6 @@ namespace Website.Models
 {
   public class ContactGenerator
   {
-    public HtmlString Name { get; set; }
-    public HtmlString Text { get; set; }
+
   }
 }

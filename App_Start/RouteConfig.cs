@@ -18,11 +18,6 @@ namespace Website.App_Start
       RouteTable.Routes.MapRoute("GetNContactsRoute", "GetNContacts", new { controller = "ContactGenerator", action = "GetNContacts" });
       RouteTable.Routes.MapRoute("RunSegmentedRuleRoute", "RunSegmentRuleOnAllContacts", new { controller = "ContactGenerator", action = "RunSegmentRuleOnAllContacts" });
     }
-
-    public static void RegisterRoutes(RouteCollection routes)
-    {
-      routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-      RouteTable.Routes.MapRoute("SomeRouteName", "/GetContact", new { controller = "ContactGenerator", action = "GetContactDetails" });
-    }
+    
   }
 }

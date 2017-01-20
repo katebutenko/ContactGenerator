@@ -13,12 +13,6 @@ namespace Website.Repositories
     {
       var contactGenerator = new ContactGenerator();
 
-      //var rendering = RenderingContext.Current.Rendering;
-      //var datasource = rendering.Item;
-
-      contactGenerator.Name = new HtmlString("A name assigned from the repo");
-      contactGenerator.Text = new HtmlString("A text assigned from the repo");
-
       return contactGenerator;
 
     }
