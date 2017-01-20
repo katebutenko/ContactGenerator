@@ -39,6 +39,8 @@ namespace Website.Controllers
       public string Name;
       public float Latitude;
       public float Longitude;
+      public string DestinationCountry;
+
 
       public SimplifiedContact()
       {
@@ -204,11 +206,12 @@ namespace Website.Controllers
       for (int i = 1; i <= n; i++)
       {
         int randomAirportIndex = randomizer.Next(airportCollection.Count());
-        Contact contact = CreateContactAndSetTag(airportCollection[randomAirportIndex].Id);
+        Airport randomAirport = airportCollection[randomAirportIndex];
+        Contact contact = CreateContactAndSetTag(randomAirport.Id);
         
-        AddInteraction(contact, airportCollection[randomAirportIndex]);
+        AddInteraction(contact, randomAirport);
 
-        list.Add(new SimplifiedContact(contact));
+        list.Add(new SimplifiedContact(contact) { DestinationCountry = randomAirport.Country});
       }
 
       return Json(list);

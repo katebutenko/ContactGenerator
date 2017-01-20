@@ -78,9 +78,9 @@
           point.latitude = contact.Latitude;
           point.longitude = contact.Longitude;
           point.title = contact.Name;
-          imagesToDraw.push(point);
-          //addContact(point);
+          point.destination = contact.DestinationCountry;
 
+          imagesToDraw.push(point);
         })
        }
                       

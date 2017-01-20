@@ -22,13 +22,8 @@ var map = AmCharts.makeChart("chartdiv", {
     "zoomLongitude": 5,
     "zoomLatitude": 35,
    
-    //"lines": [{
-    //  "id": "line1",
-    //  "arc": -0.85,
-    //  "alpha": 0.3,
-    //  "latitudes": [48.8567, 43.8163, 34.3, 23],
-    //  "longitudes": [2.3510, -79.4287, -118.15, -82]
-    //}, {
+    "lines": [], 
+    //{
     //  "id": "line2",
     //  "alpha": 0,
     //  "color": "#000000",
@@ -36,25 +31,26 @@ var map = AmCharts.makeChart("chartdiv", {
     //  "longitudes": [2.3510, -79.4287, -118.15, -82]
     //}],
     "images": [{
+    //  "svgPath": targetSVG,
+    //  "title": "Paris",
+    //  "latitude": 48.8567,
+    //  "longitude": 2.3510
+    //}, {
+    //  "svgPath": targetSVG,
+    //  "title": "Toronto",
+    //  "latitude": 43.8163,
+    //  "longitude": -79.4287
+    //}, {
+    //  "svgPath": targetSVG,
+    //  "title": "Los Angeles",
+    //  "latitude": 34.3,
+    //  "longitude": -118.15
+    //}, {
       "svgPath": targetSVG,
-      "title": "Paris",
-      "latitude": 48.8567,
-      "longitude": 2.3510
-    }, {
-      "svgPath": targetSVG,
-      "title": "Toronto",
-      "latitude": 43.8163,
-      "longitude": -79.4287
-    }, {
-      "svgPath": targetSVG,
-      "title": "Los Angeles",
-      "latitude": 34.3,
-      "longitude": -118.15
-    }, {
-      "svgPath": targetSVG,
-      "title": "Havana",
-      "latitude": 23,
-      "longitude": -82
+      "title": "Hawaii",
+      "latitude": 21.30694,
+      "longitude": -157.85833,
+      "color": "#C27690"
     }
     //, {
     //  "svgPath": planeSVG,
@@ -105,13 +101,13 @@ var map = AmCharts.makeChart("chartdiv", {
 
 });
 
-map.addListener("click", function (event) {
-  stopRealTimeMapUpdate();
-});
+//map.addListener("click", function (event) {
+//  stopRealTimeMapUpdate();
+//});
 
-map.addListener("dragCompleted", function (event) {
-  stopRealTimeMapUpdate();
-});
+//map.addListener("dragCompleted", function (event) {
+//  stopRealTimeMapUpdate();
+//});
 
 function addContact(point) {
     
@@ -152,10 +148,38 @@ function draw5Images() {
       point.svgPath = targetSVG;
       point.zoomLevel = 5;
       point.scale = 0.7;
+      if (point.destination == "Hawaii") {
+        point.svgPath = targetSVG;
+        point.zoomLevel = 5;
+        point.scale = 1;
+        point.color = "#C27690";
+
+        var line = {
+          "arc": -0.85,
+          "alpha": 0.3,
+          "latitudes": [point.latitude, 21.30694],
+          "longitudes": [point.longitude, -157.85833]
+        };
+        line.id = littleId();
+        map.dataProvider.lines.push(line);
+
+        var plane = {
+            "svgPath": planeSVG,
+            "positionOnLine": 0,
+            "color": "#FFFFFF",
+            "alpha": 0.5,
+            "animateAlongLine": true,
+            "lineId": line.id,
+            "flipDirection": false,
+            "loop": false,
+            "scale": 0.03,
+            "positionScale": 1.5
+        }
+        map.dataProvider.images.push(plane);
+      }
       map.dataProvider.images.push(point);
     })
-    //map.dataProvider.images.push(point);
-    //map.dataProvider.dataChanged = true;
+    
     redrawWithPreservedPosition();
   }
 
@@ -173,4 +197,8 @@ function redrawWithPreservedPosition(){
   }
   map.dataProvider.zoomLongitude = map.dataProvider.zoomLongitudeC = map.zoomLongitude();
   map.validateData();
+}
+
+function littleId() {
+  return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4)
 }
