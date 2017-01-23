@@ -76,3 +76,7 @@ _[Ss]cripts
 # VS generated files #
 ######################
 .vs/
+node_modules
+bower_components
+lib
+scripts

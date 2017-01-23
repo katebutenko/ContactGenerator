@@ -48,6 +48,10 @@
       <HintPath>packages\Faker.Net.Portable.2.5.0\lib\portable-net40+sl5+win8+wpa81+wp8\Faker.Portable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FileTagger, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\FileTagger.1.1.0\lib\FileTagger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -92,9 +96,14 @@
       <HintPath>..\Website\bin\Sitecore.SegmentBuilder.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -130,6 +139,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -142,49 +152,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="scripts\ajaxcall.js" />
-    <Content Include="scripts\ammap\ammap.css" />
-    <Content Include="scripts\ammap\ammap.js" />
-    <Content Include="scripts\ammap\ammap_amcharts_extension.js" />
-    <Content Include="scripts\ammap\images\arrowDown.gif" />
-    <Content Include="scripts\ammap\images\arrowUp.gif" />
-    <Content Include="scripts\ammap\images\export.png" />
-    <Content Include="scripts\ammap\images\homeIcon.gif" />
-    <Content Include="scripts\ammap\images\homeIconWhite.gif" />
-    <Content Include="scripts\ammap\images\minus.gif" />
-    <Content Include="scripts\ammap\images\panDown.gif" />
-    <Content Include="scripts\ammap\images\panLeft.gif" />
-    <Content Include="scripts\ammap\images\panRight.gif" />
-    <Content Include="scripts\ammap\images\panUp.gif" />
-    <Content Include="scripts\ammap\images\plus.gif" />
-    <Content Include="scripts\ammap\images\xIcon.gif" />
-    <Content Include="scripts\ammap\images\xIcon.svg" />
-    <Content Include="scripts\ammap\images\xIconH.gif" />
-    <Content Include="scripts\ammap\images\xIconH.svg" />
-    <Content Include="scripts\ammap\maps\js\worldLow.js" />
-    <Content Include="scripts\ammap\patterns\chalk\pattern1.jpg" />
-    <Content Include="scripts\ammap\patterns\chalk\pattern1r.jpg" />
-    <Content Include="scripts\ammap\patterns\chalk\pattern2.jpg" />
-    <Content Include="scripts\ammap\patterns\chalk\pattern3.jpg" />
-    <Content Include="scripts\ammap\patterns\chalk\pattern4.jpg" />
-    <Content Include="scripts\ammap\patterns\chalk\pattern5.jpg" />
-    <Content Include="scripts\ammap\patterns\chalk\pattern6.jpg" />
-    <Content Include="scripts\ammap\plugins\dataloader\dataloader.js" />
-    <Content Include="scripts\ammap\plugins\dataloader\dataloader.min.js" />
-    <Content Include="scripts\ammap\plugins\dataloader\index.js" />
-    <Content Include="scripts\ammap\plugins\dataloader\lang\cs.js" />
-    <Content Include="scripts\ammap\plugins\dataloader\lang\en.js" />
-    <Content Include="scripts\ammap\plugins\dataloader\lang\fr.js" />
-    <Content Include="scripts\ammap\plugins\dataloader\lang\lt.js" />
-    <Content Include="scripts\ammap\plugins\dataloader\license.txt" />
-    <Content Include="scripts\ammap\plugins\responsive\index.js" />
-    <Content Include="scripts\ammap\plugins\responsive\license.txt" />
-    <Content Include="scripts\ammap\plugins\responsive\responsive.js" />
-    <Content Include="scripts\ammap\plugins\responsive\responsive.min.js" />
-    <Content Include="scripts\ammap\themes\chalk.js" />
-    <Content Include="scripts\jquery-2.1.1.js" />
-    <Content Include="scripts\styles.css" />
-    <Content Include="scripts\test.js" />
+    <Content Include="gulpfile.js" />
+    <Content Include="js\ajaxcall.js" />
+    <Content Include="css\styles.css" />
+    <Content Include="js\test.js" />
+    <Content Include="scripts\jquery.min.js" />
+    <Content Include="scripts\site.min.css" />
+    <Content Include="scripts\site.min.js" />
     <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -195,16 +169,10 @@
     <Content Include="App_Config\Include\zzzContactGenerator\ContactGenerator.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\Todd2.pubxml" />
     <Content Include="Views\ContactGenerator\ContactGeneratorView.cshtml" />
     <Content Include="Web.config" />
-    <Content Include="scripts\ammap\plugins\dataloader\bower.json" />
-    <Content Include="scripts\ammap\plugins\dataloader\package.json" />
-    <Content Include="scripts\ammap\plugins\dataloader\readme.md" />
-    <Content Include="scripts\ammap\plugins\responsive\bower.json" />
-    <Content Include="scripts\ammap\plugins\responsive\package.json" />
-    <Content Include="scripts\ammap\plugins\responsive\readme.md" />
-    <Content Include="scripts\ammap\plugins\responsive\responsive.min.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -241,6 +209,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>gulp</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
